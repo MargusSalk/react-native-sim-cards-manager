@@ -62,22 +62,19 @@ RCT_EXPORT_METHOD(isEsimSupported:(RCTPromiseResolveBlock)resolve rejecter:(RCTP
 }
 
 API_AVAILABLE(ios(12.0))
-CTCellularPlanProvisioning *plan;
+CTCellularPlanProvisioning *plan = [[CTCellularPlanProvisioning alloc] init];
 API_AVAILABLE(ios(12.0))
-CTCellularPlanProvisioningRequest *request;
+CTCellularPlanProvisioningRequest *request = [[CTCellularPlanProvisioningRequest alloc] init];
 
 RCT_EXPORT_METHOD(setupEsim:(NSDictionary *)config
                   promiseWithResolver:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject) {
 
     if (@available(iOS 12.0, *)) {
-        plan = [[CTCellularPlanProvisioning alloc] init];
-
         if (plan.supportsCellularPlan == NO) {
             NSError *error = [NSError errorWithDomain:@"react.native.simcardsmanager.handler" code:2 userInfo:nil];
             reject(@"1", @"The device doesn't support a cellular plan", error);
         } else {
-            request = [[CTCellularPlanProvisioningRequest alloc] init];
             request.OID = config[@"oid"];
             request.EID = config[@"eid"];
             request.ICCID = config[@"iccid"];
